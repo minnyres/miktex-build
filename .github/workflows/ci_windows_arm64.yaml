@@ -97,7 +97,7 @@ jobs:
         run: |
           $env:path += ";C:/Qt/${{ env.qt_version }}/msvc2019_arm64/bin;${{ runner.temp }}/msys64/usr/bin;C:/ProgramData/chocolatey/lib/apache-fop/tools/fop-2.6/fop"
           git clone `
-            --branch ${{ miktex_version }} `
+            --branch ${{ env.miktex_version }} `
             --depth 1 `
             https://github.com/MiKTeX/miktex.git
           cd miktex
