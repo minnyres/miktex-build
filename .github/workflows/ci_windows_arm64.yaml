@@ -111,7 +111,7 @@ jobs:
             -DUSE_SYSTEM_APRUTIL=ON -DUSE_SYSTEM_APR=ON `
             -DQT_HOST_PATH="C:/Qt/${{ env.qt_version }}/msvc2019_64"
           cmake --build build
-          cmake --install build 
+          cmake --install build  
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
