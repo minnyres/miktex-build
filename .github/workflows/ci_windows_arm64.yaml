@@ -45,7 +45,7 @@ jobs:
         uses: lukka/run-vcpkg@v10
         with:
           vcpkgDirectory: C:/vcpkg
-          doNotUpdateVcpkg: true  # the preinstalled vcpkg is updated regularly
+          doNotUpdateVcpkg: false  # the preinstalled vcpkg is updated regularly
 
       - name: Install dependencies from vcpkg
         run: |
