@@ -68,7 +68,8 @@ jobs:
           $packages = `
             "icu:arm64-windows-release",
             "boost-locale:arm64-windows-release",
-            "apr:arm64-windows-release"
+            "apr:arm64-windows-release",
+            "apr-util:arm64-windows-release"
           ${{ env.RUNVCPKG_VCPKG_ROOT }}/vcpkg.exe upgrade `
             --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
             --no-dry-run
