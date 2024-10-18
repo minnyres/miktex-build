@@ -69,7 +69,8 @@ jobs:
             "icu:arm64-windows-release",
             "boost-locale:arm64-windows-release",
             "apr:arm64-windows-release",
-            "apr-util:arm64-windows-release"
+            "apr-util:arm64-windows-release",
+            "pixman:arm64-windows-release"
           ${{ env.RUNVCPKG_VCPKG_ROOT }}/vcpkg.exe upgrade `
             --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
             --no-dry-run
@@ -110,6 +111,7 @@ jobs:
             -DCMAKE_TOOLCHAIN_FILE="${{ env.RUNVCPKG_VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" `
             -DVCPKG_TARGET_TRIPLET=arm64-windows-release `
             -DUSE_SYSTEM_APRUTIL=ON -DUSE_SYSTEM_APR=ON `
+            -USE_SYSTEM_PIXMAN=ON `
             -DQT_HOST_PATH="C:/Qt/${{ env.qt_version }}/msvc2019_64"
           cmake --build build
           cmake --install build  
