@@ -67,7 +67,8 @@ jobs:
           # clear buildtrees after each package installation to reduce disk space requirements
           $packages = `
             "icu:arm64-windows-release",
-            "boost-locale:arm64-windows-release"
+            "boost-locale:arm64-windows-release",
+            "apr:arm64-windows-release"
           ${{ env.RUNVCPKG_VCPKG_ROOT }}/vcpkg.exe upgrade `
             --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
             --no-dry-run
