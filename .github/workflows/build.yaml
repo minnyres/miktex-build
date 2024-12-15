@@ -78,10 +78,10 @@ jobs:
             --branch ${{ env.miktex_version }} `
             --depth 1 `
             https://github.com/MiKTeX/miktex.git
-          $vcpkg_dir = ${{ env.RUNVCPKG_VCPKG_ROOT }}
+          $vcpkg_dir = "${{ env.RUNVCPKG_VCPKG_ROOT }}"
           $msys2_dir = "${{ runner.temp }}\msys64"
           $qt_dir = "C:\Qt\${{ env.qt_version }}\msvc2022_64"
-          $miktex_install = ${{ env.miktex_path }}
+          $miktex_install = "${{ env.miktex_path }}"
           ./build.ps1
 
       - name: Upload build artifacts
