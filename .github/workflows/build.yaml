@@ -1,0 +1,91 @@
+name: Build for Windows
+
+on:
+  push:
+
+jobs:
+  build-windows:
+    name: Build
+    runs-on: windows-latest
+    env:
+      qt_version: "6.8.1"
+      miktex_version: "24.4"
+      miktex_path: "${{ github.workspace }}/miktex-msvc-x64"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup devcmd
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
+
+      - name: Install MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            gperf  
+            bison
+            flex
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'microsoft' # See 'Supported distributions' for available options
+          java-version: '17'
+
+      - name: Install build tools
+        run: |
+          choco install pandoc apache-fop xsltproc doxygen.portable 
+
+      # use the preinstalled vcpkg from image
+      # https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md#package-management
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v10
+        with:
+          vcpkgDirectory: C:/vcpkg
+          #doNotUpdateVcpkg: false  # the preinstalled vcpkg is updated regularly
+
+      - name: Install dependencies from vcpkg
+        run: |
+          # clear buildtrees after each package installation to reduce disk space requirements
+          $packages = `
+            "icu:x64-windows-release",
+            "boost-locale:x64-windows-release"
+          ${{ env.RUNVCPKG_VCPKG_ROOT }}/vcpkg.exe upgrade `
+            --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
+            --no-dry-run
+          ${{ env.RUNVCPKG_VCPKG_ROOT }}/vcpkg.exe install `
+            --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
+            --clean-after-build `
+            $packages
+
+      - name: Install Qt (x64)
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: "${{ env.qt_version }}"
+          set-env: 'false'
+          dir: 'C:'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2022_64'
+          modules: 'qt5compat' 
+
+      - name: Install MiKTeX
+        run: |
+          git clone `
+            --branch ${{ env.miktex_version }} `
+            --depth 1 `
+            https://github.com/MiKTeX/miktex.git
+          $vcpkg_dir = ${{ env.RUNVCPKG_VCPKG_ROOT }}
+          $msys2_dir = "${{ runner.temp }}\msys64"
+          $qt_dir = "C:\Qt\${{ env.qt_version }}\msvc2022_64"
+          $miktex_install = ${{ env.miktex_path }}
+          ./build.ps1
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: MiKTeX_${{ env.miktex_version }}_x64
+          path: ${{ env.miktex_path }}
