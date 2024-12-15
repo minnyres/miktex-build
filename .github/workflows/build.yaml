@@ -39,13 +39,24 @@ jobs:
         run: |
           choco install pandoc apache-fop xsltproc doxygen.portable 
 
+      - name: Install Qt (x64)
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: "${{ env.qt_version }}"
+          set-env: 'false'
+          dir: 'C:'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2022_64'
+          modules: 'qt5compat' 
+
       # use the preinstalled vcpkg from image
       # https://github.com/actions/virtual-environments/blob/main/images/win/Windows2019-Readme.md#package-management
       - name: Setup vcpkg
         uses: lukka/run-vcpkg@v10
         with:
           vcpkgDirectory: C:/vcpkg
-          #doNotUpdateVcpkg: false  # the preinstalled vcpkg is updated regularly
+          doNotUpdateVcpkg: true  # the preinstalled vcpkg is updated regularly
 
       - name: Install dependencies from vcpkg
         run: |
@@ -60,17 +71,6 @@ jobs:
             --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
             --clean-after-build `
             $packages
-
-      - name: Install Qt (x64)
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: "${{ env.qt_version }}"
-          set-env: 'false'
-          dir: 'C:'
-          host: 'windows'
-          target: 'desktop'
-          arch: 'win64_msvc2022_64'
-          modules: 'qt5compat' 
 
       - name: Install MiKTeX
         run: |
