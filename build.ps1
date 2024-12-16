@@ -3,6 +3,8 @@ $ErrorActiOFFPreference = "Stop"
 $fop_dir = "C:\ProgramData\chocolatey\lib\apache-fop\tools\fop-2.6\fop"
 $env:path = "$vcpkg_dir\installed\x64-windows-release\bin;$qt_dir\bin;$fop_dir;$env:path;$msys2_dir\usr\bin"
 
+sed -i 's|!defined(MIKTEX_WINDOWS)|defined(MIKTEX_WINDOWS)|g' miktex\Libraries\3rd\fontconfig\source\src\fccompat.c
+
 cmake -B "build-x64" -G "Ninja" -DCMAKE_BUILD_TYPE=Release `
  -DCMAKE_INSTALL_PREFIX=$miktex_install -DWITH_MIKTEX_API_DOC=OFF `
  -DCMAKE_TOOLCHAIN_FILE="$vcpkg_dir\scripts\buildsystems\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows-release `
