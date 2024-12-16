@@ -63,7 +63,11 @@ jobs:
           # clear buildtrees after each package installation to reduce disk space requirements
           $packages = `
             "icu:x64-windows-release",
-            "boost-locale:x64-windows-release"
+            "boost-locale:x64-windows-release",
+            "cairo[fontconfig]:x64-windows-release",
+            "apr:x64-windows-release",
+            "apr-util:x64-windows-release",
+            "openssl:x64-windows-release"
           ${{ env.RUNVCPKG_VCPKG_ROOT }}/vcpkg.exe upgrade `
             --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
             --no-dry-run
