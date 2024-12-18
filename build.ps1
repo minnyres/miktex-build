@@ -5,6 +5,7 @@ $env:path = "$vcpkg_dir\installed\x64-windows-release\bin;$qt_dir\bin;$fop_dir;$
 
 # sed -i 's|!defined(MIKTEX_WINDOWS)|defined(MIKTEX_WINDOWS)|g' miktex\Libraries\3rd\fontconfig\source\src\fccompat.c
 mv "$vcpkg_dir\installed\x64-windows-release\include\dirent.h" "$vcpkg_dir\installed\x64-windows-release\include\dirent.h.copy"
+mv "$vcpkg_dir\installed\x64-windows-release\include\getopt.h" "$vcpkg_dir\installed\x64-windows-release\include\getopt.h.copy"
 
 cmake -B "build-x64" -G "Ninja" -DCMAKE_BUILD_TYPE=Release `
  -DCMAKE_INSTALL_PREFIX=$miktex_install -DWITH_MIKTEX_API_DOC=OFF `
