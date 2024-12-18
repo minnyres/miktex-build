@@ -1,0 +1,26 @@
+diff --git a/Programs/MiKTeX/miktex/topics/fontmaps/commands/FontMapManager.cpp b/Programs/MiKTeX/miktex/topics/fontmaps/commands/FontMapManager.cpp
+index f4a27cf..909774b 100644
+--- a/Programs/MiKTeX/miktex/topics/fontmaps/commands/FontMapManager.cpp
++++ b/Programs/MiKTeX/miktex/topics/fontmaps/commands/FontMapManager.cpp
+@@ -1085,14 +1085,14 @@ void FontMapManager::CreateFontconfigLocalfontsConf()
+     }
+     writer.WriteLine("</fontconfig>");
+     writer.Close();
++// #if defined(USE_SYSTEM_FONTCONFIG)
++//     if (this->ctx->session->IsAdminMode())
++//     {
++//         PathName confd(MIKTEX_SYSTEM_ETC_FONTS_CONFD_DIR);
++//         File::CreateLink(configFile, confd / "09-miktex.conf", { CreateLinkOption::ReplaceExisting, CreateLinkOption::Symbolic });
++//     }
++// #endif
+ #if defined(USE_SYSTEM_FONTCONFIG)
+-    if (this->ctx->session->IsAdminMode())
+-    {
+-        PathName confd(MIKTEX_SYSTEM_ETC_FONTS_CONFD_DIR);
+-        File::CreateLink(configFile, confd / "09-miktex.conf", { CreateLinkOption::ReplaceExisting, CreateLinkOption::Symbolic });
+-    }
+-#endif
+-#if !defined(USE_SYSTEM_FONTCONFIG)
+     configFile.RemoveFileSpec();
+     configFile /= MIKTEX_LOCALFONTS2_CONF;
+     if (!File::Exists(configFile))
