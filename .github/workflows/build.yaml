@@ -10,7 +10,7 @@ jobs:
     env:
       qt_version: "6.8.1"
       miktex_version: "24.4"
-      miktex_path: "${{ github.workspace }}\miktex-msvc-x64"
+      miktex_path: "${{ github.workspace }}/miktex-msvc-x64"
 
     steps:
       - name: Checkout repository
