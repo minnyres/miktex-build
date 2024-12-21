@@ -75,7 +75,12 @@ jobs:
             --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
             --clean-after-build `
             $packages
-          cat "C:\vcpkg\installed\x64-windows-release\include\zconf.h"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: headers
+          path: "C:/vcpkg/installed/x64-windows-release/include"
 
       # - name: Install MiKTeX
       #   run: |
