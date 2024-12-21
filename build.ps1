@@ -4,10 +4,6 @@ $fop_dir = "C:\ProgramData\chocolatey\lib\apache-fop\tools\fop-2.6\fop"
 $env:path = "$vcpkg_dir\installed\x64-windows-release\bin;$qt_dir\bin;$fop_dir;$env:path;$msys2_dir\usr\bin"
 
 # sed -i 's|!defined(MIKTEX_WINDOWS)|defined(MIKTEX_WINDOWS)|g' miktex\Libraries\3rd\fontconfig\source\src\fccompat.c
-mv "$vcpkg_dir\installed\x64-windows-release\include\dirent.h" "$vcpkg_dir\installed\x64-windows-release\include\dirent.h.copy"
-mv "$vcpkg_dir\installed\x64-windows-release\include\getopt.h" "$vcpkg_dir\installed\x64-windows-release\include\getopt.h.copy"
-sed -i "s|typedef unsigned long  uLong; \/\* 32 bits or more \*\/|typedef unsigned long  uLong; \/\* 32 bits or more \*\/ \n #  define FAR|g" "$vcpkg_dir\installed\x64-windows-release\include\zconf.h"
-
 cd miktex
 git apply ..\fix-use-system-fontconfig.patch
 cd ..

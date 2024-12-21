@@ -61,6 +61,7 @@ jobs:
       - name: Install dependencies from vcpkg
         run: |
           # clear buildtrees after each package installation to reduce disk space requirements
+          cd ${{ env.RUNVCPKG_VCPKG_ROOT }}
           $packages = `
             "icu:x64-windows-release",
             "boost-locale:x64-windows-release",
@@ -68,13 +69,17 @@ jobs:
             "apr:x64-windows-release",
             "apr-util:x64-windows-release",
             "openssl:x64-windows-release"
-          ${{ env.RUNVCPKG_VCPKG_ROOT }}/vcpkg.exe upgrade `
+          ./vcpkg.exe upgrade `
             --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
             --no-dry-run
-          ${{ env.RUNVCPKG_VCPKG_ROOT }}/vcpkg.exe install `
+          ./vcpkg.exe install `
             --overlay-triplets="${{ github.workspace }}/triplets_overlay" `
             --clean-after-build `
             $packages
+          mv "installed\x64-windows-release\include\dirent.h" "installed\x64-windows-release\include\dirent.h.copy"
+          mv "installed\x64-windows-release\include\getopt.h" "installed\x64-windows-release\include\getopt.h.copy"
+          ${{ runner.temp }}\msys64\usr\bin\sed -i 's|typedef unsigned long  uLong; \/\* 32 bits or more \*\/|typedef unsigned long  uLong; \/\* 32 bits or more \*\/ \n#  define FAR|g' "installed\x64-windows-release\include\zconf.h"
+          cat "installed\x64-windows-release\include\zconf.h"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
