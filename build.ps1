@@ -16,3 +16,6 @@ cmake -B "build-x64" -G "Ninja" -DCMAKE_BUILD_TYPE=Release `
  -DCMAKE_CXX_FLAGS="/W0 /DWIN32" -DCMAKE_C_FLAGS="/W0 /DWIN32" miktex
 cmake --build build-x64
 cmake --install build-x64
+
+cd "$miktex_install\texmf\miktex\bin\x64"
+windeployqt miktex-texworks.exe
