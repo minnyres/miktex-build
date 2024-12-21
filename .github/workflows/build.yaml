@@ -10,7 +10,7 @@ jobs:
     env:
       qt_version: "6.8.1"
       miktex_version: "24.4"
-      miktex_path: "${{ github.workspace }}/miktex-msvc-x64"
+      miktex_path: "${{ github.workspace }}\miktex-msvc-x64"
 
     steps:
       - name: Checkout repository
@@ -80,12 +80,6 @@ jobs:
           mv "installed\x64-windows-release\include\getopt.h" "installed\x64-windows-release\include\getopt.h.copy"
           ${{ runner.temp }}\msys64\usr\bin\sed -i 's|typedef unsigned long  uLong; \/\* 32 bits or more \*\/|typedef unsigned long  uLong; \/\* 32 bits or more \*\/ \n#  define FAR|g' "installed\x64-windows-release\include\zconf.h"
           cat "installed\x64-windows-release\include\zconf.h"
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: headers
-          path: "C:/vcpkg/installed/x64-windows-release/include"
 
       - name: Install MiKTeX
         run: |
