@@ -19,3 +19,4 @@ cmake --install build-x64
 
 cd "$miktex_install\texmf\miktex\bin\x64"
 windeployqt miktex-texworks.exe
+rm vc_redist.x64.exe

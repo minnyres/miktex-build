@@ -39,6 +39,11 @@ jobs:
         run: |
           choco install pandoc apache-fop xsltproc doxygen.portable 
 
+      - name: test msys2
+        shell: msys2 {0}
+        run: |
+          uname -a
+
       - name: Install Qt (x64)
         uses: jurplel/install-qt-action@v3
         with:
