@@ -97,15 +97,23 @@ jobs:
         shell: msys2 {0}
         run: |
           vcpkg_path=$(cygpath -u "${{ env.RUNVCPKG_VCPKG_ROOT }}\installed\x64-windows-release\bin")
-          ls $vcpkg_path
           PATH="$vcpkg_path:$PATH"
           cd "${{ env.miktex_path }}\texmf\miktex\bin\x64"
-          ldd setup.exe
-          find . -name '*.exe' -exec ldd {} ";" |  awk '{print $3}' | grep -v SYSTEM32 | grep -v System32 | grep -v WINDOWS | grep vcpkg
           find . -name '*.exe' -exec ldd {} ";" |  awk '{print $3}' | grep -v SYSTEM32 | grep -v System32 | grep -v WINDOWS | grep vcpkg | xargs -I{} cp -u {} .
 
+      - name: Initialize MiKTeX
+        run: |
+          cd "${{ env.miktex_path }}\texmf\miktex\bin\x64"
+          ./mpm --update-db
+          ./initexmf  --set-config-value [MPM]AutoInstall=1
+          ./initexmf  -update-fndb
+          ./initexmf --mklinks
+          ./mpm --verbose --package-level=basic --upgrade
+          ./initexmf --mkmaps
+          ./initexmf  -update-fndb
+            
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: MiKTeX_${{ env.miktex_version }}_x64
-          path: ${{ env.miktex_path }}
+          path: "${{ env.miktex_path }}/texmf"
