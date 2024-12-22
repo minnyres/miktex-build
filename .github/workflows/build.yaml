@@ -96,10 +96,13 @@ jobs:
       - name: copy depend dlls
         shell: msys2 {0}
         run: |
-          echo good
           PATH="${{ env.RUNVCPKG_VCPKG_ROOT }}\installed\x64-windows-release\bin:$PATH"
           cd "${{ env.miktex_path }}\texmf\miktex\bin\x64"
-          uname -a
+          ls
+          ldd *.exe
+          find . -name '*.exe' -exec ldd {} ";"
+          find . -name '*.exe' -exec ldd {} ";" |  awk '{print $3}'
+          find . -name '*.exe' -exec ldd {} ";" |  awk '{print $3}' | grep -v SYSTEM32 | grep -v System32 | grep -v WINDOWS | grep vcpkg
           find . -name '*.exe' -exec ldd {} ";" |  awk '{print $3}' | grep -v SYSTEM32 | grep -v System32 | grep -v WINDOWS | grep vcpkg | xargs -I{} cp -u {} .
 
       - name: Upload build artifacts
