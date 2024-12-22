@@ -81,6 +81,13 @@ jobs:
           ${{ runner.temp }}\msys64\usr\bin\sed -i 's|typedef unsigned long  uLong; \/\* 32 bits or more \*\/|typedef unsigned long  uLong; \/\* 32 bits or more \*\/ \n#  define FAR|g' "installed\x64-windows-release\include\zconf.h"
           cat "installed\x64-windows-release\include\zconf.h"
 
+      - name: copy depend dlls
+        shell: msys2 {0}
+        run: |
+          PATH="${{ env.RUNVCPKG_VCPKG_ROOT }}\installed\x64-windows-release\bin:$PATH"
+          echo $PATH
+          ls "${{ env.RUNVCPKG_VCPKG_ROOT }}\installed\x64-windows-release\bin"
+
       - name: Install MiKTeX
         run: |
           git clone `
@@ -98,10 +105,6 @@ jobs:
         run: |
           PATH="${{ env.RUNVCPKG_VCPKG_ROOT }}\installed\x64-windows-release\bin:$PATH"
           cd "${{ env.miktex_path }}\texmf\miktex\bin\x64"
-          ls
-          ldd *.exe
-          find . -name '*.exe' -exec ldd {} ";"
-          find . -name '*.exe' -exec ldd {} ";" |  awk '{print $3}'
           find . -name '*.exe' -exec ldd {} ";" |  awk '{print $3}' | grep -v SYSTEM32 | grep -v System32 | grep -v WINDOWS | grep vcpkg
           find . -name '*.exe' -exec ldd {} ";" |  awk '{print $3}' | grep -v SYSTEM32 | grep -v System32 | grep -v WINDOWS | grep vcpkg | xargs -I{} cp -u {} .
 
