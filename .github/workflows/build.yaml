@@ -39,11 +39,6 @@ jobs:
         run: |
           choco install pandoc apache-fop xsltproc doxygen.portable 
 
-      - name: test msys2
-        shell: msys2 {0}
-        run: |
-          uname -a
-
       - name: Install Qt (x64)
         uses: jurplel/install-qt-action@v3
         with:
@@ -101,8 +96,10 @@ jobs:
       - name: copy depend dlls
         shell: msys2 {0}
         run: |
+          echo good
           PATH="${{ env.RUNVCPKG_VCPKG_ROOT }}\installed\x64-windows-release\bin:$PATH"
           cd "${{ env.miktex_path }}\texmf\miktex\bin\x64"
+          uname -a
           find . -name '*.exe' -exec ldd {} ";" |  awk '{print $3}' | grep -v SYSTEM32 | grep -v System32 | grep -v WINDOWS | grep vcpkg | xargs -I{} cp -u {} .
 
       - name: Upload build artifacts
